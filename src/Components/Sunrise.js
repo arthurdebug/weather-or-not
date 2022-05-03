@@ -24,7 +24,19 @@ ChartJS.register(
 
 
 export const options = {
-  
+  responsive: true,
+  scales: {
+    y: {
+      ticks:{
+        callback:(value)=>{
+          var minutes = value % 60;
+          var hours = (value-minutes)/60;
+          return hours + ':' + minutes
+        }
+
+      }
+        }
+      },
   plugins: {
     legend: {
       position: 'top',
@@ -33,8 +45,20 @@ export const options = {
       display: true,
       text: 'Sun Rise Set Chart',
     },
-  },
+    tooltip:{
+      callbacks:{
+        label: function(tooltipItem){
+          var val = parseInt(tooltipItem.raw)
+          var minutes = val % 60;
+          var hours = (val-minutes)/60;
+          return hours + ':' + minutes
+        }
+      }
+    }
+  }
+
 };
+
 const sunDate = riseSet.map(
     function(index){
         return index["YYYY-MM-DD"]
@@ -60,6 +84,7 @@ function parseTime(times){
   }
   return parsedTime
 }
+
 let chartData = {}
 chartData.RiseTime=parseTime(sunRiseTime)
 chartData.SetTime=parseTime(sunSetTime)
